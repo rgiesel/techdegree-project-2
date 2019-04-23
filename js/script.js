@@ -7,6 +7,22 @@ FSJS project 2 - List Filter and Pagination
 // Identifies the list of students being used in this project and stores them in a variable
 const studentList = document.getElementsByClassName('student-item cf');
 
+
+
+
+// Creates a search bar and places it at the top of the page
+const pageHeaderDiv = document.querySelector('.page-header');
+const studentSearchDiv = document.createElement('div');
+const searchInput = document.createElement('input');
+const searchButton = document.createElement('button');
+studentSearchDiv.setAttribute('class', 'student-search');
+searchInput.setAttribute('placeholder', 'Search for students...');
+searchButton.textContent = 'Search';
+pageHeaderDiv.appendChild(studentSearchDiv);
+studentSearchDiv.appendChild(searchInput);
+studentSearchDiv.appendChild(searchButton);
+
+
 // Creates a function to display 10 students on the page at a time, depending on the current page number
 const showPage = (list, page) => {
   const startIndex = (page * 10) - 10;
@@ -19,6 +35,7 @@ const showPage = (list, page) => {
     }
   }
 }
+
 
 /*
 Creates a function that determines the number of pages needed to display the
@@ -57,6 +74,24 @@ const appendPageLinks = (list) => {
       });
   }
 }
+
+let searchResults = [];
+
+// Creates a function to add functionality to the search feature
+
+const searchFunc = () => {
+  searchResults = [];
+  for (let i=0; i < studentList.length; i++) {
+    if (searchInput.value.length !== 0 && studentList[i].textContent.toLowerCase().
+            includes(searchInput.value.toLowerCase())) {
+              searchResults.push(studentList[i]);
+    }
+  }
+  showPage(searchResults, 1);
+}
+
+
+
 
 /* Calls the showPage function with the list of students declared at the
 beginning of this script and sets the initial page to 1. Calls the appendPageLinks

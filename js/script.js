@@ -8,19 +8,22 @@ FSJS project 2 - List Filter and Pagination
 const studentList = document.getElementsByClassName('student-item cf');
 
 
-
-
-// Creates a search bar and places it at the top of the page
+/* Creates a search bar and places it at the top of the page, along with a search input field.
+Creates elements needed for search functionality and appends them appropriately.
+*/
+let searchResults;
 const pageHeaderDiv = document.querySelector('.page-header');
 const studentSearchDiv = document.createElement('div');
 const searchInput = document.createElement('input');
 const searchButton = document.createElement('button');
+const noResultsP = document.createElement('p');
 studentSearchDiv.setAttribute('class', 'student-search');
 searchInput.setAttribute('placeholder', 'Search for students...');
 searchButton.textContent = 'Search';
 pageHeaderDiv.appendChild(studentSearchDiv);
 studentSearchDiv.appendChild(searchInput);
 studentSearchDiv.appendChild(searchButton);
+studentSearchDiv.appendChild(noResultsP);
 
 
 // Creates a function to display 10 students on the page at a time, depending on the current page number
@@ -75,22 +78,56 @@ const appendPageLinks = (list) => {
   }
 }
 
-let searchResults = [];
 
 // Creates a function to add functionality to the search feature
-
 const searchFunc = () => {
-  searchResults = [];
   for (let i=0; i < studentList.length; i++) {
     if (searchInput.value.length !== 0 && studentList[i].textContent.toLowerCase().
             includes(searchInput.value.toLowerCase())) {
               searchResults.push(studentList[i]);
     }
   }
-  showPage(searchResults, 1);
 }
 
 
+// Adds a click event listener to the search button to run the searchFunc function and display results
+searchButton.addEventListener('click', (e) => {
+  noResultsP.textContent = '';
+  searchResults = [];
+  searchFunc();
+  const pageDiv = document.querySelector('.page');
+  const paginationDiv = document.querySelector('.pagination');
+  pageDiv.removeChild(paginationDiv);
+  for (let i=0; i < studentList.length; i++) {
+    studentList[i].style.display = 'none';
+  }
+  showPage(searchResults, 1);
+  appendPageLinks(searchResults);
+  if ( searchResults.length === 0 ) {
+    noResultsP.textContent = 'No results have been found.'
+  }
+});
+
+
+// Adds an event listener to the search input field to display results as they are keyed in
+searchInput.addEventListener('keyup', (e) => {
+  if ( searchInput.value.length !== 0 ) {
+    noResultsP.textContent = '';
+    searchResults = [];
+    searchFunc();
+    const pageDiv = document.querySelector('.page');
+    const paginationDiv = document.querySelector('.pagination');
+    pageDiv.removeChild(paginationDiv);
+    for (let i=0; i < studentList.length; i++) {
+      studentList[i].style.display = 'none';
+    }
+    showPage(searchResults, 1);
+    appendPageLinks(searchResults);
+    if ( searchResults.length === 0 ) {
+      noResultsP.textContent = 'No results have been found.'
+    }
+  }
+});
 
 
 /* Calls the showPage function with the list of students declared at the

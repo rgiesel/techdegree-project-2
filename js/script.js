@@ -17,6 +17,7 @@ const studentSearchDiv = document.createElement('div');
 const searchInput = document.createElement('input');
 const searchButton = document.createElement('button');
 const noResultsP = document.createElement('p');
+const studentDetails = document.getElementsByClassName('student-details');
 studentSearchDiv.setAttribute('class', 'student-search');
 searchInput.setAttribute('placeholder', 'Search for students...');
 searchButton.textContent = 'Search';
@@ -81,13 +82,19 @@ const appendPageLinks = (list) => {
 
 // Creates a function to add functionality to the search feature
 const searchFunc = () => {
-  for (let i=0; i < studentList.length; i++) {
-    if (searchInput.value.length !== 0 && studentList[i].textContent.toLowerCase().
-            includes(searchInput.value.toLowerCase())) {
-              searchResults.push(studentList[i]);
+  if (searchInput.value.length === 0) {
+    for (let i=0; i < studentList.length; i++) {
+      searchResults.push(studentList[i]);
+    }
+  } else {
+      for (let i=0; i < studentList.length; i++) {
+      if (studentDetails[i].textContent.toLowerCase().includes(searchInput.value.toLowerCase())) {
+                searchResults.push(studentList[i]);
+      }
     }
   }
 }
+
 
 
 // Adds a click event listener to the search button to run the searchFunc function and display results
@@ -111,7 +118,6 @@ searchButton.addEventListener('click', (e) => {
 
 // Adds an event listener to the search input field to display results as they are keyed in
 searchInput.addEventListener('keyup', (e) => {
-  if ( searchInput.value.length !== 0 ) {
     noResultsP.textContent = '';
     searchResults = [];
     searchFunc();
@@ -126,7 +132,6 @@ searchInput.addEventListener('keyup', (e) => {
     if ( searchResults.length === 0 ) {
       noResultsP.textContent = 'No results have been found.'
     }
-  }
 });
 
 

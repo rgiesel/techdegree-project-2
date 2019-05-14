@@ -95,10 +95,8 @@ const searchFunc = () => {
   }
 }
 
-
-
-// Adds a click event listener to the search button to run the searchFunc function and display results
-searchButton.addEventListener('click', (e) => {
+// Creates a variable to store the function to be run in the event listeners that follow
+const displayFunc = (e) => {
   noResultsP.textContent = '';
   searchResults = [];
   searchFunc();
@@ -113,26 +111,14 @@ searchButton.addEventListener('click', (e) => {
   if ( searchResults.length === 0 ) {
     noResultsP.textContent = 'No results have been found.'
   }
-});
+}
+
+// Adds a click event listener to the search button to run the searchFunc function and display results
+searchButton.addEventListener('click', displayFunc);
 
 
 // Adds an event listener to the search input field to display results as they are keyed in
-searchInput.addEventListener('keyup', (e) => {
-    noResultsP.textContent = '';
-    searchResults = [];
-    searchFunc();
-    const pageDiv = document.querySelector('.page');
-    const paginationDiv = document.querySelector('.pagination');
-    pageDiv.removeChild(paginationDiv);
-    for (let i=0; i < studentList.length; i++) {
-      studentList[i].style.display = 'none';
-    }
-    showPage(searchResults, 1);
-    appendPageLinks(searchResults);
-    if ( searchResults.length === 0 ) {
-      noResultsP.textContent = 'No results have been found.'
-    }
-});
+searchInput.addEventListener('keyup', displayFunc);
 
 
 /* Calls the showPage function with the list of students declared at the
